@@ -1,0 +1,152 @@
+APIs and Microservices
+
+
+
+
+/*************************************************************/
+/*************************************************************/
+/************** Managing Packages with NPM *******************/
+/*************************************************************/
+/*************************************************************/
+
+Node Package Manager (NPM) - CLI package manager for node (to share and control JS modules for Node)
+packages get saved in nodemodules folder (i'm seeing nodemodules, node modules, and node_modules, not sure which is right)
+  global and local, generally use local to keep projects separate
+  only name and version are actually required
+package.json file
+  every new project gets this file, holds dependencies, can hold specific version numbers for stability
+  "author" field - where you can put your name
+  "description" field - summarize the project for downloaders, future maintainers, others
+  "keywords" field - array of double-quoted keywords describing your site
+  "license" field - something like "MIT" or "BSD"
+      advice on http://choosealicense.com
+  "version" field - version number, required
+      SemVer (semantic versioning)
+          industry standard for versioning of projects with public apis
+          Major.Minor.Patch
+              Patches (bug fixes) and minors are backward-compatible
+              Major changes will actually break some past api functioning
+      tilde before version number means to use latest patches
+          "moment": "~2.10.2"
+      caret before version number means to use latest minor
+          "moment": "^2.10.2"
+  "dependencies" field - object with "package":"version" pairs
+
+
+
+
+/*************************************************************/
+/*************************************************************/
+/**************** Basic Node and Express *********************/
+/*************************************************************/
+/*************************************************************/
+
+node - backend js
+important node modules
+    HTTP - server
+    File System - reading and modifying files
+    Path - work with dir and file paths
+    Assertion Testing
+    Express - not built-in but really common
+.env hidden file
+    holds secret environment files
+        API keys from external services
+        database URI
+        configuration options
+    process.env is a global node object, process.env.VAR_NAME gets value
+    put var names in all caps with underscores between words, and no spaces around equals sign
+Express
+    runs between server and frontend
+    does routing
+    simple, good for beginners
+    app.listen(port) - listen on a port
+    app.somemethod(path,handler)
+        path might be string or regex
+        handler function
+            function(req,res) {}
+                req is the request obj, res is the response
+                res.send('response string') will serve that string
+                res.sendFile(path) will serve a file
+                    requires an absolute path
+                    __dirname global node var gives base directory
+    middlewares are functions that intercept route handlers and add info
+        mount middleware with app.use(path, middlewareFunction)
+            if path is omitted, middleware applies to all requests
+        express.static(path) middleware
+            add folders to project where assets are located
+        example: app.use(express.static(__dirname + "/public"));
+    REST (REpresentational State Transfer) APIs allows data exchange
+        serve from inside a route with res.json(jsObject)
+    write a middleware
+        takes req, res, and next (next function in cycle)
+        must call next() at the end
+        mount root-level middleware with app.use(mwfunc)
+        mount for particular method/verb with app.whatevermethod(mwfunc)
+            for instance app.post(mwfunc) only applies mwfunc to POST requests
+        some useful parts of req for middleware in example:
+            req.method (GET, POST, etc), req.path (relative URI), req.ip
+    middleware chaining
+        app.METHOD(path, middlewareFunction1,mF2)
+        pluses
+            break into smaller units, 
+            reusability
+            data validation
+            error handling 
+            special route cases
+    route parameters
+        with a route defined as '/user/:userId/book/:bookId' and 
+          the request asking for '/user/546/book/6754', 
+          req will get a req.params object of 
+            {userId: '546', bookId: '6754'}
+    query parameters
+        the query string is all the field=value pairs after 
+          the ? and delimited by &
+        stored in the req.query object
+    POST requests
+        default for forms (not sure if that's true, but it's standard anyway)
+        in REST, POST should be used to send data and 
+          create new database items
+        data stays in request body ("payload") instead of URL
+        encoding of body is described in Content-Type header field
+            application/x-www-form-urlencoded for form data 
+              (encoded just like URI after ?
+            multipart/form-data for uploading binary files
+        parse with body-parser package
+            var bodyParser = require('body-parser');
+            app.use(bodyParser.urlencoded({extended:false}));
+            req.body should be object with params
+            (alternatively, instead of putting urlencoded in app.use, 
+              you can just put it at the beginning of a 
+              particular route's middleware chain)
+
+
+
+
+/*************************************************************/
+/*************************************************************/
+/***************** MongoDB and Mongoose  *********************/
+/*************************************************************/
+/*************************************************************/
+
+MongoDB 
+    stores "documents" (records)
+    non-relational NoSQL database
+    all data for the record stored in that record
+    benefits
+        scalability - data is distributed (sharded), 
+            so you improve performance by adding servers?
+        flexibility - just add data/properties, 
+            no need to build more tables and relations
+        replication - robust to nodes going down
+    stores data in JSON
+Mongoose
+    NPM module for writing objects in javascript style
+mLab
+    MongoDB db-as-a-service platform
+    so they do all the config and hosting
+    create account, create db, create user, get connection string
+glitch
+    put connection string in .env
+    add mongodb and mongoose to package.json
+    const mongoose=require("mongoose")
+    mongoose.connect(theURI)

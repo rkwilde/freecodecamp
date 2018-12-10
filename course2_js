@@ -1,0 +1,460 @@
+
+
+
+
+/*****************************************************************************/
+/*****************************************************************************/
+/************************** Basic Javascript *********************************/
+/*****************************************************************************/
+/*****************************************************************************/
+
+7 data types: undefined, null, boolean, string, symbol, number, and object.
+uninitialized variables are undefined
+single and double quotes do the same thing
+shift() is like pop for the beginning of the array
+unshift() is like put for beginning of array
+Queue data structure - new items added to the back, old taken from front (FIFO?)
+myObj.hasOwnProperty("propname"); to check if a property exists
+parseInt("007")
+parseInt("011",2) parses base-2 "011" to decimal 3
+
+
+
+
+/*****************************************************************************/
+/*****************************************************************************/
+/******************************* ES6 *****************************************/
+/*****************************************************************************/
+/*****************************************************************************/
+
+Will learn about: Arrow functions, Classes, Modules, Promises, Generators, let and const
+"use strict";
+    changes JS faux pas stuff into actual errors
+    not sure if use strict is new in ES6 or not
+let vs var
+    let throws an error if you declare a variable twice
+    let declarations inside a block, statement, or expression apply only there
+const is like let, but read-only and not reassignable
+    by convention, const variables are named with all caps and underscores
+    when you declare a const that points to a mutable object...
+        the object is still mutable
+        but you just still can't have the const point to anything else
+to freeze a mutable object, use Object.freeze(obj);
+    trying to change elements of the object will be ignored
+        (but still won't actually throw an error)
+anonymous functions - inline functions that don't actually get a name
+    ES5 already have anonymous function() notation
+arrow functions - ES6 style anonymous functions
+default parameters in ES6
+rest parameter in ES6
+    function howMany(...args) {}
+        args is an array with all the arguments passed
+spread operator in ES6
+    Math.max(...arr)  instead of  Math.max.apply(null,arr)
+    works as argument list or in array literal
+    so whereas the rest parameter turned multiple arguments into an array,
+        the spread parameter spreads out an array into multiple arguments
+destructuring assignment in ES6
+    const { x, y, z } = obj;
+        x, y, and z get the values of the same-named properties in obj
+    const { x : a, y : b } = obj;
+        a and b get the values of obj.x and obj.y
+    you can also destructure nested objects
+    destructuring arrays
+        [a,,b] = [1,2,3,4,5,6];
+            a gets 1, b gets 3
+        [a,b] = [b,a];
+            switch a and b
+        [a,b,...arr] = [1,2,3,4,5,6];
+            a gets 1, b gets 2, and arr is [3,4,5,6]
+    destructuring objects in arguments
+        const myFunc = ({prop1,prop2}) => {}
+        only has to actually pass those properties
+template literals in ES6
+    use backticks, recognizes newlines without \n, ${var1+var2}
+object literal declaration simplification in ES6
+    const getObject = (x,y) => ({x,y});
+        automatically knows to set object's x property to value of x and y to y
+        instead of {x:x,y:y}
+method declaration simplification in ES6
+    const myObj = { myFunc() {} };
+        instead of const myObj = { myFunc: function() {} };
+class syntax in ES6
+    not a full-fledged OOP paradigm
+        classes are really still just functions
+    ES5 could use the new keyword with a function
+        not sure how an ES5 function qualified as a constructor... 
+            are all functions instantiatable? Or just the ones that use the "this" keyword somewhere?
+    ES6 has a constructor() function now
+        syntax
+            class SpaceShuttle {
+                constructor(targetPlanet){
+                    this.targetPlanet = targetPlanet;
+                }
+            }
+            const zeus = new SpaceShuttle('Jupiter');
+        you can declare a class inside a function too, apparently
+        getters and setters
+            get myGetter(){}
+            set mySetter(updateVal){}
+            called with obj.myGetter and obj.mySetter=newVal, no parens required
+import in ES6/Node.JS
+    "non-browser feature" - requires some kind of node.js precompilation step to work in browsers
+    ES5 just had require(), which brought in a whole file
+    named import
+        import { countItems } from "math_array_functions"
+        usually needs ./ in path, otherwise looks in node_modules directory
+        import everything from a file
+            import * as myMathModule from "math_functions";
+    import default
+        import add from "math_functions";
+            don't use curly braces
+export in ES6/Node.JS
+    non-browser feature
+    named export
+        export functions
+            export { capitalizeString }
+        export variables
+            export const foo = "bar";
+        both at once
+            export { capitalizeString, foo }
+    export default
+        only one per file (usually used when you only have one file to export)
+        don't use var, let, or const with it
+        export default function add(x,y) { return x+y; }
+
+
+
+
+/*****************************************************************************/
+/*****************************************************************************/
+/******************** Regular Expressions ************************************/
+/*****************************************************************************/
+/*****************************************************************************/
+
+RegExp is a kind of object in JS, not a native type
+RegExp objects have a test function
+    /Code/.test("freeCodeCamp"); (returns true)
+pipe (match any of these animals" /dog|cat|bird|fish/
+flags go after the ending slash
+    i flag stands for ignore case
+      /freeCodeCamp/i
+strings have a match function that takes the RegExp and returns the matched substring
+    g flag makes match() function return an array instead of one value
+period (.) matches any one char
+character classes
+    put characters that will work in square brackets
+    /b[aiu]g/ matches bag, big, and bug, but not bog
+    hyphens make ranges
+negated character sets
+    [^abcd] - the caret means match everything except abcd
+plus sign (+) means match 1 or more of the character or character class
+asterisk (*) means match 0 or more
+    asterisks default to being greedy (taking as much as possible)
+        so "titanic".match(/t[a-z]*i/) returns titani
+    ? after * makes it lazy
+        so "titanic".match(/t[a-z]*?i/) returns ti
+carets (^) not in character sets mean match the beginning of a string
+dollar sign ($) anchor character means match end of string
+shorthand character classes
+    \w stands for letters, numbers, and underscores [A-Za-z0-9_]
+    \W stands for everything else [^A-Za-z0-9_]
+    \d for digits [0-9]
+    \D for non-digits [^0-9]
+    various kinds of whitespace: space, \r \t \f \n \v
+    \s stands for any kind of whitespace character [ \r\t\f\n\v]
+    \S stands for everything else [^ \r\t\f\n\v]
+{3} to match char 3 times
+    {3,5} to match the char between 3 and 5 times
+        leave second number blank to have no upper bound
+? makes char optional
+    /colou?r/
+lookaheads are ways to set requirements for the string without returning actual matches
+    (?=...)  is a positive lookahead, where ... is the requirement
+    (?!...)  is a negative lookahead
+    seems like they all start at the beginning of the string
+        to check for 2 consecutive digits, they did (?=\D*\d{2})
+capture groups
+    put a pattern in parens, then refer to it later as \1 \2 etc
+    seems to match the same string multiple times
+string.replace(/pattern/,"replacementvalue");
+    the replacement value can use $1 $2 etc to refer to capture groups
+    str.replace(/(\w+)\s(\w+)/, '$2 $1');   switches two words
+    str.replace(/^\s*(.+?)\s*$/,'$1');   trimmed white space from beginning and end
+
+
+
+
+/*****************************************************************************/
+/*****************************************************************************/
+/****************************** Debugging ************************************/
+/*****************************************************************************/
+/*****************************************************************************/
+
+3 types of errors
+    syntax error - doesn't even run
+        detected by compilers and fancy editors
+    runtime error - unexpected behavior, code compiles but doesn't execute
+        includes infinite loops
+    semantic/logical error - compiles and runs, but doesn't do what it's supposed to
+intro ideas
+    checking intermediate values and types
+    elimination - go halfway through a big bit of code and see if the error is likely before or after
+debug tools
+    Firefox "Web Console"
+    console.log
+    console.clear clears the console
+    typeof returns a string of the type
+        boolean, null, undefined, number, string, symbol (new to ES6), and object (includes arrays)
+common errors
+    misspelled a variable or function name
+        often you get a reference errors because JS can't find the misspelling
+    opening/closing brackets - match right away
+    single/double quotes
+    assignment (=) instead of equality (==)
+    leaving off () with function call
+        this is set the variable equal to the function definition
+    wrong order of arguments
+        throws runtime error if types wrong, you have logical error otherwise
+    off by one indexing errors
+        0-indexing
+        check docs of procedure for whether ranges are inclusive
+    reinitializing variables in loops
+    infinite loops
+        needs a terminal condition that will definitely be met
+
+
+
+
+/*****************************************************************************/
+/*****************************************************************************/
+/********************* Basic Data Structures *********************************/
+/*****************************************************************************/
+/*****************************************************************************/
+
+arrays and objects, pretty much
+arrays
+    push and unshift to add
+    pop and shift to remove
+    arr.splice
+        remove (in-place) any number of consecutive elements from an array (and return them)
+        arg 1 is start index, arg 2 is number of elements
+        optional third argument is replacement element
+    arr.slice
+        return elements without affecting original array
+        arg 1 is start index, arg 2 is end index + 1
+    define arrays that copy from other arrays with spread (...) operator
+    arr.indexOf returns index of element, or -1
+        returns first index if it occurs twice
+    multi-dimensional arrays
+        a normal array is 1 level deep
+            if you nest an array in an array, you're two levels deep
+                nest another in that one, and you're three levels deep
+objects
+    collections of key:'value' pairs
+        i think you can put key in quotes if you want
+        value can be string, number, another object, etc
+    dot and bracket notation
+        bracket allows for variables
+    delete myObj.myProperty;
+    myObj.hasOwnProperty('propname')  returns whether object has property
+    for...in statement can iterate through keys of an object
+        for (let user in users) {}
+        i don't think you can expect sensible ordering
+        loops through keys, not actual objects, so refer to them with users[user]
+    Object.keys(myobj) returns an array of property name strings in the object
+        order might be goofy
+
+
+
+
+/*****************************************************************************/
+/*****************************************************************************/
+/********************* Basic Algorithm Scripting *****************************/
+/*****************************************************************************/
+/*****************************************************************************/
+
+an algorithm is a sequence of steps toward a particular outcome
+understand the problem, break into chunks, remember to debug with console.log
+"falsy values" are false, null, 0, "", undefined, and NaN
+
+
+
+
+/*****************************************************************************/
+/*****************************************************************************/
+/********************* Object Oriented Programming ***************************/
+/*****************************************************************************/
+/*****************************************************************************/
+
+oop is one of several major approaches to software development
+object structure is flexible, and allows for inheritance and less repetition
+objects have properties and methods, which can vary based on the particular object
+    let myObj = {
+        prop: 2,
+        meth: function() {}
+    }
+"this" keyword
+constructors
+    conventions
+        should be a function with a capitalized name
+        should apply some properties/behaviors to "this" and then return nothing
+    function Dog() { this.color="brown" }
+    let myDog = new Dog();
+    myObj instanceof myConstructor
+        returns true if myObj was created with myConstructor
+    an object also has a special "constructor" property that references the constructor function that created it
+        note that instanceof is still necessary because the constructor property can be overwritten
+"own" properties - properties that an instance of an object has within itself
+    hasOwnProperty() returns true for own properties, but not for prototype properties
+prototype properties
+    have Bird hold the numLegs property so each object doesn't have to own it
+        Bird.prototype.numLegs = 2;
+            OR
+        Bird.prototype = {
+            constructor: Bird,  // otherwise Bird.constructor will get cleared
+            numLegs: 2,
+            eat: function() {}
+        };
+    Bird.prototype.isPrototypeOf(myObj);
+    prototype chain
+        a method like hasOwnProperty is...
+            defined in Object.prototype
+            accessed by Bird.prototype
+            and then that is further accessed by duck
+        Bird is the supertype for duck, duck is a subtype. 
+            Both are subtypes of Object, which is a supertype to both.
+DRY principle (don't repeat yourself)
+    if Bird and Dog share a method, you might want to put it in an Animal supertype
+Inheritance
+    this section is confusing
+    apparently to make one constructor/prototype inherit from another, 
+            you set its prototype to a specially-created instance of the parent prototype
+        Bird.prototype = Object.create(Animal.prototype);
+        but then you still have to reset the child's constructor to its own constructor
+            Bird.prototype.constructor = Bird;
+    you can still override prototype methods after inheritance step
+Mixins
+    when you want multiple non-inheriting objects to have the same method
+    let flyMixin = function(obj) {
+        obj.fly = function() {
+            console.log("Flying, wooosh!");
+        }
+    }
+    now you can run this mixin with bird and plane and give the method to each
+    it doesn't say this, but I can't see why you couldn't use these mixins in constructors
+        ... though I guess it wouldn't be in the prototype that way
+closure
+    the concept that a function has access to the context in which it was created
+    inside a constructor
+        property declared with let is private to the constructor, 
+                but can still be accessed by a getter in the same scope
+            not sure why example uses "let hatchedEgg = 10;" instead of "let this.hatchedEgg = 10;"
+    commonly exploited by having an IIFE create a local variable 
+        and then return a function that can edit that variable
+        (which is nice because the variable retains its state but isn't globally accessible)
+Immediately Invoked Function Expression (IIFE)
+    put function() {} inside parens, put another set of parens after, and a semicolon
+    it'll just run without getting a name or anything
+    commonly used to create a module
+        let myModule = (function() { return ... })();
+        then call functions with myModule.func()
+
+
+
+
+/*****************************************************************************/
+/*****************************************************************************/
+/************************** Functional Programming ***************************/
+/*****************************************************************************/
+/*****************************************************************************/
+
+functional programming is an approach to development
+benefits
+    breaks a program into small, testable parts
+    easier to manage... somehow
+    saves you from sneaky bugs... somehow
+        like off-by-one errors
+core principles
+    Functions are independent from the state of the program or global variables. 
+        They only depend on the arguments passed into them to make a calculation
+    Functions try to limit any changes to the state of the program 
+        and avoid changes to the global objects holding data
+    Functions have minimal side effects in the program
+how another page describes what functional programming "is about"
+    1) Isolated functions
+        no dependence on the program state, including global vars that are subject to change
+    2) Pure functions
+        the same input always gives the same output
+    3) Functions with limited side effects
+        any changes/mutations to program state outside the function are carefully controlled
+terminology
+    callbacks - functions given to other functions (might be a little more complicated?)
+    first class function - function that come in and out of vars and functions like any expression
+        so... all JS functions
+    higher order function - function that takes or returns other functions
+    lambda - function that's getting passed around
+imperative code (boo, apparently)
+    set of imperative statements to the computer
+    often changes global vars and other program state stuff
+        like a for loop that manually iterates through an array's indices
+functional programming is a type of "declarative code", not imperative
+pure functions don't mutate their inputs...
+    because then you could run the same function with the same inputs and get a different answer?
+if a function's gonna use something, pass it in, don't just use the global
+array functions
+    map function
+        called on an array, takes a callback function
+        returns a new array applying callback to each element
+        doesn't change original array!
+    forEach function
+        doesn't return anything or make an array, just performs some action based on each element
+    filter function
+        call on array, pass callback that returns true for elements to keep
+    slice over splice (to avoid mutating the array)
+    concat over push
+        works on strings as well as arrays
+        doesn't mutate either string/array, just returns new string/array
+    reduce
+        most general JS array operation
+        technically, filter and map could be derived from reduce
+        I wasn't able to get it to work just now with an object as the running total, 
+            but it worked with an array, though I needed a [0,0] starting value
+    sort (mutates objects, so make a copy of the array first)
+        default callback uses Unicode point value
+        callback compareFunction(a,b) should return positive/true if b should be sorted before a
+    join
+        joins array elements into string using a delimiter
+    every
+        returns true if every element passes callback
+    some
+        returns true if any element passes callback
+string function(s)
+    split(delim) splits a string into an array of strings by the character/regex
+        "" delim means split out every character
+    replace?
+URL slugs are the human-readable parts of the URL, often thrown in, for instance, by a CMS for a new blog entry
+arity
+    arity of a function is the number of arguments it requires
+    "currying" a function means converting a function of arity N to N functions of arity 1
+        useful if you're only going to have one piece of information ready at a time
+        curriedFunction(1)(5)(2);
+    partial application - applying a few arguments at a time and returning new functions along the way
+        var partialFunction = impartialFunction.bind(this,1,2);
+
+
+
+
+/*****************************************************************************/
+/*****************************************************************************/
+/**************** Intermediate Algorithm Scripting ***************************/
+/*****************************************************************************/
+/*****************************************************************************/
+
+arguments object automatically contains all arguments passed to a function
+    "arguments" is not technically an array, but it's called an "array-like object" and is indexed the same
+Array.from() returns an array based on an array-like or iterable object (like arguments)
+spinal case is apparently all-lowercase-words-joined-by-dashes
+myString.charCodeAt() gets a unicode value from a character
+    might have issues with emojis and stuff, would have to check
+String.fromCharCode(number) gets a character from a unicode number

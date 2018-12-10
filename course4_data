@@ -1,0 +1,159 @@
+Data Visualization
+
+
+
+
+/*************************************************************/
+/*************************************************************/
+/************** Data Visualization with D3 *******************/
+/*************************************************************/
+/*************************************************************/
+
+D3.js
+    stands for Data Driven Documents
+    dynamic browser data visualization
+    utilizes scalable vector graphics (SVG)
+    binds to DOM
+d3.select("a")
+    selects first <a> element
+.append()
+    arg is element to add to doc
+    returns handle to node that got something appended to it
+.text()
+    set or get text of node
+example
+    d3.select("ul").append("li").text("Very important item");
+d3.selectAll("a")
+    select all <a> tags
+.data(myDataset)
+    attaches myDataset to a the selected element(s)
+    .data(myDataset).enter().append("li").text("text")
+        enter and append a new element for each piece of data, and put "text" as its text
+        interestingly, this example doesn't actually show the data, just "text"
+    text() can take a callback
+        .text((d) => `${d} USD`);
+.style("font-family","verdana");
+    change font family of selection to verdana
+    note that it uses spinal case instead of camel
+    or use callback
+        .style("color", (d) => {
+            /*return some d-based color*/
+        });
+.attr(property,value)
+    set element property to value
+    .attr("class","container");
+        add "container" class to selection
+        does it overwrite current classes?
+            yes, appears to overwrite
+so... to make a bar chart, 
+    take the set of values
+    enter and append them
+    style("height",callback) to change the height to be proportional each data point
+SVG
+    scalable vector graphics
+        scalable - doesn't pixelate when you scale
+    width and height attributes
+        no scale, just numbers that keep their proportion to each other
+    and svg tag is an area you put shapes inside of
+    putting shapes inside SVG
+        x,y coordinates - x goes left to right, y goes top to bottom
+        <rect> tag for svg rectangles
+            attributes: x, y, height, width, fill (bgcolor)
+            x and y refer to where the rectangle goes within the svg parent
+            for bar chart
+                set x with callback (d,i) => {}
+                    optional i is for index of data point d
+                    set x to something like 30*i to space bars
+                set height of bar to be proportional to data point
+                set y with heightOfSVG - heightOfBar
+        <text> tag for svg labels
+            attributes: x, y, fill (text color)
+        <title> tag for svg tooltips
+            in bar chart, take each rect element and .append("title"), then .text((d) => d)
+        <circle> tag for svg circles
+            attributes: cx, cy, r
+                all have callbacks
+            for scatterplot...
+                assume r is constant (all dots in plot are same size)
+                if you have an array of x,y coordinates, 
+                    just use the callbacks to set each cx to each d[0] and each cy to r-d[1]
+                add corresponding <text> tags to the svg if you want labels
+const scale = d3.scaleLinear()
+    create a scale function for an svg element
+    then call scale() on stuff
+    scale.domain([50,480]);
+        set the domain between the two values
+    scale.range([10,500]);
+        set the range between the two values
+    scale(50)
+        returns 10, because 50 is the bottom of the domain and 10 is the bottom of the range, 
+            and it's just doing linear interpolation
+    scale(750)
+        returns 807.67, mapping onto range by linear interpolation
+    you can use d3.min and d3.max functions to help define scales that leave room for padding and stuff
+    examples all used different scales for x and y and applied them to the functions like .attr("x",callback), etc
+d3.min(data,callback)
+    also d3.max()
+    returns min/max
+    can take a callback function to help it know how to find the data if it's not a regular 1D number array
+axes
+    const xAxis = d3.axisBottom(xScale);
+    svg.append("g")
+       .attr("transform", "translate(0, " + (h - padding) + ")")
+       .call(xAxis);
+    NOTES - there's also an axisLeft() function, 
+        and the <g> tag stands for group (normally it's for grouping elements),
+        and the transform is so that the axis doesn't go off the screen
+
+
+
+
+/*************************************************************/
+/*************************************************************/
+/****************** JSON APIs and AJAX ***********************/
+/*************************************************************/
+/*************************************************************/
+
+Overview
+    Application Programming Interfaces (APIs)
+        help programs interact with other programs
+    Asynchronous JavaScript And XML (AJAX)
+    JavaScript Object Notation (JSON)
+add event listener after page loads
+    document.addEventListener('DOMContentLoaded',function(){
+        document.getElementById('getMessage').onclick = () => {};
+    });
+JSON rules
+    square brackets for arrays
+    curly brackets for objects
+    double quotes for key names and strings
+get data from API
+    API sends JSON as bytes that come into the app as a string
+    JSON.parse method translates string into JS object
+    XMLHttpRequest (AJAX)
+        req=new XMLHttpRequest();
+        req.open("GET",'/json/cats.json',true);
+            // 3rd arg of true means request is asynchronous
+        req.send();
+        req.onload=function(){
+            //do something with JSON string req.responseText
+        };
+post data to API and get response
+    req=new XMLHttpRequest();
+    req.open("POST",url,true);
+    req.setRequestHeader('Content-Type','text/plain');
+    req.onreadystatechange=function(){
+        if(req.readyState==4 && req.status==200){
+            document.getElementsByClassName('message')[0].innerHTML=req.responseText;
+        }
+    };
+req.send(userName);
+Geolocation data
+    if (navigator.geolocation){
+        navigator.geolocation.getCurrentPosition(function(position) {
+            document.getElementById('data').innerHTML="latitude: "+ position.coords.latitude + "<br>longitude: " + position.coords.longitude;
+        });
+    }
+
+
+

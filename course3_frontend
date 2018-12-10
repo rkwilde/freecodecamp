@@ -1,0 +1,457 @@
+
+Front End Libraries
+
+
+
+
+/*************************************************************/
+/*************************************************************/
+/********************* Bootstrap *****************************/
+/*************************************************************/
+/*************************************************************/
+
+overview
+- mobile-first
+- CSS styles and classes
+- JS stuff
+- 12 column layout
+- templates for buttons, images, tables, forms, nav
+get started
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"     integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
+        pretty sure this will update with new versions?...
+    wrap everything in a container-fluid div (makes everything mobile responsive)
+mobile-responsive images - add "img-responsive" class
+center text with text-center class
+buttons
+    btn
+    btn-default, btn-primary, bt-info, btn-danger
+    btn-block  - make button a block element
+side-by-side elements
+    put inside a <div class="row"> element
+    for three, you could put each element into a <div class="col-xs-4"> element
+text classes
+    they had me put a text-primary class on an h2... made the text blue
+    text-danger on a span made it a dull red
+font-awesome
+    vector graphics in .svg format
+    treated just like fonts
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" integrity="sha384-XdYbMnZ/QjLh6iI4ogqCTaIjrFk87ip+ekIjefZch0Y+PvJ8CDYtEs1ipDmPorQ+" crossorigin="anonymous">
+    i element nowadays usually used for icons instead of italics
+        span works too
+wells
+    "well" class creates visual sense of depth
+form-control class gives width of 100%, apparently?
+
+
+
+
+/*************************************************************/
+/*************************************************************/
+/************************ jQuery *****************************/
+/*************************************************************/
+/*************************************************************/
+
+$(document).ready(function() {});
+    run the function as soon as the browser has loaded the page
+$ is referred to as the "dollar sign operator" or "bling"
+function chaining is when you do $("selector").aFunction().anotherFunction()
+selectors
+    $("button")
+        selects all button elements
+    $(".my-class")
+    $("#myID")
+    $(".my-class:nth-child(3)")
+        selects anything that's .my-class and a 3rd child (1-based)
+    $(".target:odd")
+        selects elements with target class that are odd children (0-based)
+actions
+    $("button").addClass("animated bounce");
+        add a class. (apparently the "animated" and "bounce" classes 
+            are in Animate.css... not sure if that's a standard thing 
+            or just something FreeCodeCamp made for this example)
+    .removeClass("myClass")
+    .css("color","blue");
+        remember to use camelCase instead of hyphens for css property names
+    .prop("someproperty",value);
+        .prop("disabled",true);
+            disables an element
+        apparently the value only goes in quotes if it's a string
+    .html("whatever");
+        replaces html tags/content that were in the selection with "whatever"
+        any tags in "whatever" will become actual html elements
+    .text("whatever");
+        alters text, but only text. doesn't create tags
+    .remove()
+        removes element entirely
+    .appendTo("#myID");
+        remove from current parent element and append to element #myID
+    .clone()
+        clone an element
+        .clone().appendTo("#myID") appends a copy to #myID 
+traversing
+    .parent()
+        select parent of current selection
+        I tried multiple elements with diff parents, it selected all parents
+    .children()
+        select all children of selection
+
+
+
+
+/*************************************************************/
+/*************************************************************/
+/************************ Sass *******************************/
+/*************************************************************/
+/*************************************************************/
+
+Sass
+    Syntactically Awesome StyleSheets
+    CSS language extension / preprocessor
+    old syntax .sass used indentation instead of brackets for nesting and newlines for new properties
+    new syntax .scss (Sassy CSS) uses brackets to nest and regular semicolons
+        one nice thing: SCSS accepts regular CSS without errors
+variables, lists, maps
+    $my-color: green;
+        use in styles as $my-color
+    $colorList: blue, red, green;
+    $colorMap: (color1: blue, color2: red, color3: green);
+nesting
+    nav ul li {  }
+        change to nav { ul { li { }}}
+mixins
+    basically CSS functions
+    @mixin box-shadow($x, $y, $blur, $c) {
+        -webkit-box-shadow: $x, $y, $blur, $c;
+        -moz-box-shadow: $x, $y, $blur, $c;
+        -ms-box-shadow: $x, $y, $blur, $c;
+        box-shadow: $x, $y, $blur, $c;
+    }
+    div {
+        @include box-shadow(0px, 0px, 4px, #fff);
+    }
+logic
+    @if $color == go {
+        color: green;
+    }
+    @else if $color == stop {
+        color: red;
+    }
+    @else {
+        color: yellow;
+    }
+loops
+    @for $i from 1 through 12 {
+        .col-#{$i} { width: 100%/12 * $i; }
+    }
+        "through" means include 12
+        #{} syntax combines the var with the text to make a string
+        the math operators are a bit tricky and unpredictable if I remember right
+    @for $i from 1 to 12 {}
+        would only go to 11
+    @each $color in $colorList {}
+    @each $key, $color in $colorMap {}
+    @while $x < 13 {}
+Partials
+    importable scss modules
+    start name with underscore (Sass won't convert it to its own CSS file)
+    @import 'mixins'
+        will import _mixins.scss
+Extend
+    borrow the styles from another element/class as a starting point
+    .big-panel {
+        @extend .panel;
+        width: 150px;
+        font-size: 2em;
+    }
+    styles with percent signs are only for extending, aren't compiled by themselves
+        %thiswillonlybeextended {}
+
+
+
+
+/*************************************************************/
+/*************************************************************/
+/************************ React ******************************/
+/*************************************************************/
+/*************************************************************/
+
+React is Facebook's open source JS library for building user interfaces
+stuff you can do
+    create components
+    handle state and props
+    update data as it changes with
+        event listeners
+        certain life cycle methods
+React has its own lightweight representation of the DOM
+React automatically decides to only update the parts of the DOM it needs to
+JSX is React's own markup language
+    JSX is a syntactic extension of JS
+    write HTML directly within JS
+    Babel preprocessor turns JSX into valid JS
+    note that challenges are calling a function on JSX objects
+        const JSX = <h1>Hello JSX!</h1>;
+        ReactDOM.render(JSX, document.getElementById('root'))
+    a JSX must return a single element
+        but that element can have child elements
+{/* comments */}
+ReactDOM is React's rendering API that updates the actual HTML DOM
+ReactDOM.render(componentToRender, targetNode)
+React vs HTML
+    React changes a lot of html attributes and events to camelCase versions
+        onclick becomes onClick
+        onchange becomes onChange
+        class becomes className (class is a reserved word in JS)
+    React doesn't allow self    closing tags
+        <br> would have to be <br />
+        <div></div> can be <div /> (just can't have content)
+Everything in React is a component, and a page will have multiple components
+creating a component
+    with a function
+        creates a "stateless functional component"
+            basically it can receive data and render it, but does not manage or track changes to that data
+        just have a function return a JSX (or null)
+        must begin function name with a capital letter
+        seems common to use arrow functions for these, for some reason
+    with class keyword
+        class MyClass extends React.Component {
+            constructor(props) { super(props); }
+            render() { return JSX; }
+        }
+        MyClass has access to React features like local state and lifecycle hooks
+            still a stateless component if it doesn't use state
+            called a stateful component if state is maintained
+        render() can include custom HTML tags named after components, and the component will be inserted there
+            remember to close the tag with />
+composition
+    nest within the render() function as described previously
+render a component with ReactDOM.render(<ComponentName />,targetElem);
+props
+    when composing custom elements (components), pass custom attributes
+    attributes will come through as properties of the props object
+    to get Javascript code to work in JSX, enclose it in curly braces
+    default
+        MyComponent.defaultProps = { someProp: "value" };
+    check prop types
+        MyComponent.propTypes = { handleClick: PropTypes.func.isRequired };
+            throws a warning if the property is 1) not a function or 2) not given (hence isRequired)
+        func and bool are abbreviated, other types written out
+        PropTypes requires its own import
+    differences for ES6 class components (vs stateless functional)
+       refer to props with this.props.thePropYouWant
+state
+    data your app needs to know about that can change over time
+    stateful components
+        usually you use stateless when you can, to limit state management to specific areas of the app
+    declare state property in constructor
+        this.state = {};
+    state is encapsulated
+        so other components can't see it
+    often the bulk of the JS work is done in the render function before the return statement
+    updating state
+        use this.setState({key1:val,key2:val})
+        don't mess with this.state directly
+        only updates what it needs to
+        notes:
+            React can batch multiple state updates to improve performance
+            setState calls can be asynchronous (are they usually?... not sure)
+    the UI will generally be updated based on the state
+class methods
+    let class methods access "this" keyword
+        explicit binding in constructor
+            this.myMethod = this.myMethod.bind(this);
+            then they defined myMethod() {} in the class
+            then the render() function got some event listeners to call the method
+controlled input
+    when you take a form control element and move its state management to React
+    <input value={this.state.input} onChange={this.handleChange} />
+        where handleChange(event) sets the input state to event.target.value
+    so...
+        the input field is populated by the state
+        changes to the input field will update the state
+        the state can also be instantly used elsewhere
+controlled form
+    <form onSubmit={this.handleSubmit}>
+        handleSubmit should then make the state reflect the submission somehow
+        event.preventDefault() in handler will keep form from refreshing the page as it would by default
+React paradigms
+    unidirectional data flow
+        state flows down to child components as needed
+        state doesn't flow back up
+        only necessary parts of state get passed
+    complex stateful apps can be broken down into few/one stateful component
+        state pieces will get passed to children as props when needed
+    separating state logic from UI logic is one of React's key principles
+pass functions as props to children if children should be able to affect parent
+lifecycle methods/hooks
+    special React methods that represent what to do at specific points in the component's life
+    componentWillMount()
+        called when component is mounted to DOM
+    componentDidMount()
+        called after component is mounted to DOM
+        calls to setState make the component re-render, but that doesn't appear to trigger the lifecycle hook again
+        put API calls here
+        put event listeners here too
+            React has a synthetic event system that improves event standardization across different browsers
+            But listeners on the document or window objects are not synthetic
+                you'll add them in ComponentDidMount() and remove them in ComponentWillUnmount()
+    componentWillReceiveProps(nextProps)
+        right before props are passed
+        in here you'll have access to previous props (this.props) and new props being passed (nextProps)
+    shouldComponentUpdate()
+        takes nextProps and nextState as parameters
+        returns true/false to determine if React should update component
+        by default, update/rerender happens every time new props are received, even if those props are the same
+    componentWillUpdate()
+    componentDidUpdate()
+        component finished rendering
+    componentWillUnmount()
+        remember to clean up event listeners
+inline styles
+    pass style a curly-wrapped JS object
+    use camelCase properties (instead of spinal/kebab case), and JS data type values
+    numbers with units (16px) can be passed as strings ("16px") or as numbers (16), which React will assume means pixels
+    <div style={{color: "yellow", fontSize: 16}}>Mellow Yellow</div>
+    for some reason, apparently inline styles are common in react
+conditionals
+    if statements in render() method, probably defining JSX that you can insert into return
+    put {condition && content} right in JSX
+    put {condition ? content : altContent} right in JSX
+    often conditionals will depend on props, like when a child component is rendering for the parent
+    you'll also use conditionals for inline styles
+        having style changes determined just by state is in line with React's unidirectional data flow
+array.map() can be used for dynamic rendering of an unknown number of elements
+    like mapping each element to a JSX as in <li>{elem}</li>
+    when creating a bunch of sibling elements, remember to give each element a unique key attribute
+        React uses this key to make updates more efficient
+array.filter() is also often used to filter items based on their state
+rendering React on the server
+    it can be good to precompile some of your React code on the server so that...
+        search engines have some html to crawl and index
+        clients don't have to render so much javascript
+    ReactDOMServer.renderToString(<App />);
+
+
+
+
+/*************************************************************/
+/*************************************************************/
+/************************ Redux ******************************/
+/*************************************************************/
+/*************************************************************/
+
+predictable state container for JS apps
+helps with
+    consistent app behavior
+    running in different environments (client, server, native)
+    testing
+can be used with React
+Redux store
+    the object that's the single source of truth for entire app state
+    all state updates must go through the store
+    let store = Redux.createStore(reducer);
+        reducer is a function they'll go over later
+    store.getState()
+        returns current state
+    store.dispatch(action)
+        gets actions into store
+        action can also be value of an action creator function
+        reducer function determines response to dispatched action
+    store.subscribe(callback(action))
+        called every time an action is dispatched
+        i figure this is for side effects and stuff that you don't want to do in the reducer
+Redux action
+    object with info about some event that occurred
+        must have a type property, with the type of action
+        can contain data too
+        store can take the object and update its state accordingly
+    action creators
+        functions that return actions
+reducer function
+    defines response to dispatched actions
+    takes state and action as arguments
+    returns a new state
+        remember to always return a new state
+            (don't write to previous passed state)
+    pure function with no side effects or api calls or anything
+    usually a switch (action.type) statement
+    multiple reducers
+        if you have some unrelated pieces of state that need to be combined into the one store to rule them all or whatever
+        const rootReducer = Redux.combineReducers({
+            auth: authenticationReducer,
+            notes: notesReducer
+            /*note that these key names are arbitrary*/
+        });
+action types are usually defined as constants and then referenced by creators and reducers later
+asynchronous actions
+    Redux Thunk middleware
+        pass Redux.applyMiddleware(ReduxThunk.default) as optional second arg of Redux.createStore
+    create asynchronous action
+        return a function in the action creator which...
+            takes dispatch as an argument
+            dispatches actions and perform asynchronous requests
+                often you'll dispatch an action to say you're starting a request
+                dispatch another action with result of request
+remember to never mutate Redux state!
+    cloning an array with spread operator
+        let newArray = [...myArray];
+        let newArray = [...myArray,newElement];
+        note that it's a shallow copy (won't give copies of mutable elements)
+    also slice(), concat() for arrays
+    Object.assign for objects
+        Object.assign({},obj1,obj2) takes an empty object and shallow copies all the key:value pairs from obj1 and obj2
+
+
+
+
+/*************************************************************/
+/*************************************************************/
+/******************* React and Redux *************************/
+/*************************************************************/
+/*************************************************************/
+
+general idea
+    single redux store manages app's entire state
+    React components suscribe to relevent data in store
+    React components dispatch actions that trigger store updates
+    it's generally best to have one redux store instead of each React component holding its own state
+        there are some exceptions for really specific local state stuff
+    react-redux package
+        allows redux state and dispatch to be passed to react components as props
+API has two key features
+    Provider
+        looks like a React component
+        plug it into the render() of a wrapper component
+        pass store={store} as a prop
+        code
+            const Provider = ReactRedux.Provider;
+            class AppWrapper extends React.Component { 
+                render() { return ( <Provider store={store}> <App /> </Provider> ); }
+            };
+    connect
+        makes state and dispatch available to props
+        code
+            const connect = ReactRedux.connect;
+            const connectingFunc = connect(mapStateToProps,mapDispatchToProps);
+            const ConnectedComponent = connectingFunc(MyComponent);
+                i guess MyComponent is usually named "Presentational"?...
+                <ConnectedComponent /> ends up being what gets rendered inside the Provider tags in the wrapper
+        uses two helper functions
+            mapStateToProps(state)
+                returns object 
+                    seems like a props object for react
+                    to pass props to components with pieces of redux state as necessary
+            mapDispatchToProps(dispatch)
+                returns object
+                    keys will be props for components
+                    keys map to functions that dispatch from action creators
+        once redux is tracking state and passing props to Presentational...
+            get rid of local state references to redux state
+            replace this.state.whatever with this.props.whatever
+            replace setState with dispatch function
+apparently configration is a pain in the butt
+    here are some import statements it uses, at least
+        import React from 'react'
+        import ReactDOM from 'react-dom'
+        import { Provider, connect } from 'react-redux'
+        import { createStore, combineReducers, applyMiddleware } from 'redux'
+        import thunk from 'redux-thunk'

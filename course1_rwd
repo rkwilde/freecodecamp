@@ -1,0 +1,212 @@
+FreeCodeCamp
+
+
+
+
+/********************************************************************/
+/********************************************************************/
+/************************** Basic HTML ***************************/
+/********************************************************************/
+/********************************************************************/
+
+
+
+
+/********************************************************************/
+/********************************************************************/
+/************************** Basic CSS ***************************/
+/********************************************************************/
+/********************************************************************/
+
+
+
+
+/********************************************************************/
+/********************************************************************/
+/******************** Applied Visual Design *************************/
+/********************************************************************/
+/********************************************************************/
+
+
+
+
+/********************************************************************/
+/********************************************************************/
+/********************* Applied Accessibility ************************/
+/********************************************************************/
+/********************************************************************/
+
+three general concepts
+    have well-organized code that uses appropriate markup
+    ensure text alternatives exist for non-text and visual content
+    create an easily-navigated page that's keyboard-friendly
+WCAG (W3 Consortium's Web Content Accessibility Guidelines)
+alt attribute on images
+    used by search engines
+        including cataloging the content of the image
+    used by screen readers
+    mandatory in html5 specification
+    even if it doesn't make sense to include, do alt=""
+headers read without content should make sense, since some screen readers do that
+    use them in order too, e.g. h2 inside h1 instead of h3 inside h1
+    only one h1 element on the page, which is the main subject and is used by search engines
+semantic tags: main, header, footer, nav, article, section
+    main should wrap the main unique content of a page, and there should only be one on a page
+        landmark (assistive devices often jump right to main)
+    article for each self-contained set of content
+    section for sections inside an article or main or something
+    header tag for intro info (esp that's repeated at the top of all pages), landmark
+    nav for the page's main nav, landmark
+    footer, landmark
+audio
+    audio tags for semantic meaning
+        controls attribute for controls
+    embedded audio
+    some kind of label for the deaf, and synchronized captions and transcripts
+    alternate formats of audio
+figure element
+    wraps some visual representation
+    figcaption element
+forms
+    label tag wraps specific form control items
+        for attribute
+            explicitly associates label with a form control
+            used by screen readers
+            makes it so you don't have to actually put the control inside the label tags
+            seems to be pointing to id's instead of names now
+    fieldset tag can go around multiple radio buttons to group them
+        legend tag can provide description for grouping
+    <input type="date"...>
+        good for accessibility in modern browsers
+        include a placeholder so that old browsers defaulting to text will know the format required
+time tag wraps a date or time and gives the browser the time expressed in whatever words are inside
+screen reader only
+    .sr-only { position: absolute; left: -10000px; width: 1px; height: 1px; top: auto; overflow: hidden; }
+    putting it offscreen instead of display:none or visibility:hidden or zeroed out dimensions means that screen readers will still get it but normies won't
+contrast of at least 4.5 to 1, based on ratio of luminance
+colorblindness
+    some online tools can simulate how colorblind people might see two similar colors
+keyboard
+    links
+        some screen readers will skip to the links, so you want more descriptive text than "click here"
+    accesskey
+        accesskey="b" on any element will make it more keyboard-navigatable
+    tabindex
+        ="0" to put an element in the list of things to tab through
+            (along with links and form controls and stuff that get tabbed through automatically)
+        =negativenumber - something to do with being focusable but not reachable by the keyboard
+        =positivenumber - tab goes through positive numbers in order, then back to defaults and zeroes
+        tabindex also allows :focus pseudoclass to work on a p element
+
+
+
+
+/********************************************************************/
+/********************************************************************/
+/*************** Responsive Web Design Principles *******************/
+/********************************************************************/
+/********************************************************************/
+
+media queries
+max-width with percentages seems to refer to the percent of the images width, not the parent
+    whereas if width is 100% then it stretches
+"retina" images mean images that look good on fancy "retina" (high-res apple) screens
+    an easy way to make things look crisp is to cut the height and width in half in css
+10vw means 10% of viewport width, vh similar
+70vmin means 70% of the smaller of the viewport's height and weight, vmax similar
+
+
+
+
+/********************************************************************/
+/********************************************************************/
+/*********************** CSS Flexbox  *******************************/
+/********************************************************************/
+/********************************************************************/
+
+UI's two components
+    visual (colors, fonts, images)
+    placement and positioning of those elements
+        that's where flexbox comes in
+display:flex turns a parent element into a flex container
+    in their example they have every little nested thing flexed too, so each is its own flex container
+    you can then align children into columns and rows
+        flex-direction defaults to row, can be column, row-reverse, column-reverse
+flex alignment
+    for rows...
+        imagine the flex container having two axes:
+            a main axis splitting top from bottom equally
+            a cross axis splitting left from right equally
+        justify-content css property for flex container will align along main axis
+            center centers
+            flex-start pushes inner boxes left
+            flex-end pushes inner boxes right
+            space-between - space between items, with first at start, last at end, and others equally spaced in between
+            space-around - like space between, but first and last not locked to edges
+        align-items aligns along cross axis
+            center, flex-start, flex-end, stretch, baseline (keeps the text baseline aligned or something?)
+            as far as I can tell, stretch is the default
+        flex-wrap
+            default is nowrap, which squishes all the boxes into the container regardless of the width
+            wrap lets them wrap when they run out of space
+            wrap-reverse wraps up instead of down
+    for columns...
+        switch the main and cross axes
+    properties for the items themselves (as opposed to the container)
+        flex-shrink - number determining how fast an element should shrink when the container runs out of space
+        flex-grow
+        flex-basis - initial size (basis for grow and shrink)
+        shorthand - flex: 1 0 10px; (flex: flex-grow flex-shrink flex-basis)
+            default - flex: 0 1 auto;
+        order:2;  means this box should come second
+        align-self overrides align-items for a particular item
+        note that float, clear, and vertical-align do not work on flex items.
+
+
+
+
+/********************************************************************/
+/********************************************************************/
+/************************** CSS Grid  *******************************/
+/********************************************************************/
+/********************************************************************/
+
+for containers
+    display: grid;   to designate a container
+    grid-template-columns: 50px 50px;
+        grid-template-rows defines rows, otherwise they wrap automatically
+        units: px, em, fr (fraction of avail space), auto (content-based), % (of container width)
+            I think fr takes into account the other items and calculates based on what's still available
+    grid-column-gap: 10px;  (and grid-row-gap and grid-gap - shorthand for both gaps or row-then-column)
+    justify-items and align-items
+for items
+    grid-column: line# / line#;
+        if there's 3 columns, then the imaginary lines would numbered 1-4, so go from one line to another
+    grid-row is similar
+    justify-self to position content within a particular cell
+        stretch by default
+        start
+        center
+        end
+    align-self is the cross-axis version of justify self, and has the same values
+divide grid into area template
+    grid-template-areas: "header header header" "advert content ." "footer footer footer";
+        makes a header area at the top, footer at the bottom, 
+            content in the middle, advert on the side, and nothing on the other side
+    grid-area: header;
+        make this item take up the header area
+    without defining areas...
+        grid-area: x/y/X/Y;
+            take up from x to X and y to Y  (same lines as before)
+    combine areas with media queries to have responsive semantic design
+functions
+    grid-template-columns
+        repeat(2,50px) is the same as 50px 50px
+        repeat(2,50px 1fr) is the same as 50px 1fr 50px 1fr
+        repeat(2,50px 1fr) 100px is the same as 50px 1fr 50px 1fr 100px
+        minmax(50px,200px) sets a minimum and maximum size for a column
+        functions can be nested
+        repeat(auto-fill,minmax(60px,1fr)) 
+            will put as many 60ish (plus some) pixel cells as it can fit, and wrap the rest
+        auto-fit is like auto-fill, but whereas auto-fill will keep adding empty columns as
+            the container grows, auto-fit will just stretch the actual items that exist

@@ -1,0 +1,20 @@
+Information Security and Quality Assurance
+
+
+
+
+/*************************************************************/
+/*************************************************************/
+/********** Information Security with HelmetJS ***************/
+/*************************************************************/
+/*************************************************************/
+
+HelmetJS
+    express-based middleware
+    set HTTP headers automatically to prevent accidental info passing
+    Content Security Policy, XSS Filtering, HTTP Strict Transport Security, others
+get helmet package from npm, then let helmet=require("helmet");
+app.use(helmet.hidePoweredBy() to remove X-Powered-By header so attackers don't know you're using express
+app.use(helmet.hidePoweredBy({ setTo: 'PHP 4.2.0' })) to lie about your framework
+helmet.frameguard({action: 'deny'})
+    don't allow iframing (to avoid clickjacking)
